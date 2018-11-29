@@ -1,0 +1,14 @@
+FROM rabbitmq:3-management
+
+# Add rabbitmq definitions with custom setup
+ADD docker/definitions.json /etc/rabbitmq/
+RUN chown rabbitmq:rabbitmq /etc/rabbitmq/definitions.json
+
+# Add custom script to proviion rabbitmq
+ADD docker/docker-entrypoint-rabbitmq.sh /docker-entrypoint.sh
+
+# Set correct executable permissions
+RUN chmod +x /docker-entrypoint.sh
+
+# Define default command
+CMD ["/docker-entrypoint.sh"]

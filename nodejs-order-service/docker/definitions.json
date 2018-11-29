@@ -1,0 +1,79 @@
+{
+    "vhosts": [{
+            "name": "\/"
+        },
+        {
+            "name": "\/integrationtest"
+        }
+    ],
+    "parameters": [],
+    "policies": [],
+    "queues": [{
+            "name": "audit",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {}
+        },
+        {
+            "name": "error",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {}
+        },
+        {
+            "name": "order",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-dead-letter-exchange":"error"
+            }
+        }
+    ],
+    "exchanges": [{
+            "name": "error.fanout",
+            "vhost": "/",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": true,
+            "arguments": {}
+        },
+        {
+            "name": "commands.topic",
+            "vhost": "/",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [{
+            "source": "commands.topic",
+            "vhost": "/",
+            "destination": "audit",
+            "destination_type": "queue",
+            "routing_key": "*",
+            "arguments": {}
+        },
+        {
+            "source": "commands.topic",
+            "vhost": "/",
+            "destination": "order",
+            "destination_type": "queue",
+            "routing_key": "createOrder",
+            "arguments": {}
+        },
+        {
+            "source": "error.fanout",
+            "vhost": "/",
+            "destination": "error",
+            "destination_type": "queue",
+            "routing_key": "*",
+            "arguments": {}
+        }
+    ]
+}

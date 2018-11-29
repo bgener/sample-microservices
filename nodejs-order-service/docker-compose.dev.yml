@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+
+  order-service:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_order_service.yml
+    restart: always
+    ports: 
+      - 3000:3000
+    environment:
+      - MESSAGE_BROKER_URL=amqp://test_user:test_user@rabbitmq
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile_rabbitmq.yml
+    # restart: always
+    environment:
+      - RABBITMQ_USER=test_user
+      - RABBITMQ_PASSWORD=test_user
+    ports:
+      - 15672:15672
+      - 5672:5672
