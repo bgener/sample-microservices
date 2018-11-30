@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 using Domain.Messages;
@@ -27,12 +28,17 @@ namespace WebApi.Controllers
         // GET: api/Customer
         public IEnumerable<string> Get()
         {
-            //TODO: refactor to make it a generic method which is used to execute any query
-
             var query = new GetAllUsers();
-            var queryResult = _queryExecutor.Execute(query) as GetAllUsersResult;
+            var queryResult = _queryExecutor.Execute(query);
 
-            return queryResult == null ? Enumerable.Empty<string>() : queryResult.Customers;
+            if (queryResult == null)
+            {
+                //TODO: log error
+                return Enumerable.Empty<string>();
+            }
+
+            var customers = ((GetAllUsersResult) queryResult).Customers;
+            return customers;
         }
 
 

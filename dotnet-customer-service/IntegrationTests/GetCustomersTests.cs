@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +13,7 @@ using WebApi;
 namespace IntegrationTests
 {
     [TestClass]
-    public class CustomerTests
+    public class GetCustomersTests
     {
         private IDatabaseContext _databaseContext;
         private HttpConfiguration _config;
@@ -30,7 +29,7 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void when_there_no_customers_it_should_return_empty_collection()
+        public void When_there_are_no_customers_exist_it_should_return_empty_collection()
         {
             //Arrange
             var request = CreateRestRequest("api/customer/");
@@ -45,7 +44,7 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void when_there_any_customers_it_should_return_non_empty_collection()
+        public void When_there_any_customers_it_should_return_non_empty_collection()
         {
             //Arrange
             _databaseContext.Groups.Insert(new Group
